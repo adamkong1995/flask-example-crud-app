@@ -1,16 +1,14 @@
 # Flask Example CRUD App
 
 #### It is a Flask app with the following function/package:
-- CRUD operations
-- Login Function
-- Permission Control
-- User Session
-- Ldap Authentication
-- SQLAlchemy ORM
-- PostgreSQL
-- Pandas
-- JQuery
-- Bootstrap 4
+- CRUD operations (SQLAlchmey ORM, PostgreSQL11)
+- Login Function (Flask-Login, Flask_ldap3_login)
+- Permission Control (Flask-Principal)
+- User Session (Flask-Login)
+- Ldap Authentication (Flask_ldap3_login)
+- Reporting (Pandas)
+- Frontend rendering (Jinja2, JQuery, Bootstrap4)
+
 
 #### Step to install this app (development mode)
 - To run this app, You must have Python3, Postgresql 11
