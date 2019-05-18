@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}edit{% endblock title %}
+{% block head %}
+    {{ super() }}
+
+    <!--Bootstrap-select js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+    <!--jQuery UI-->
+    <script type="text/javascript" src="/static/jquery_ui/jquery-ui.js"></script>
+    <!--Bootstrap datepicker js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
+
+    <!--jQuery UI-->
+    <link rel="stylesheet" href="/static/jquery_ui/jquery-ui.css">
+    <!--Bootstrap-select css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+    <!--Bootstrap datepicker css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css">
+    <style>
+        /*style for dropdown box*/
+        select option:first-child {
+            color: grey;
+        }
+        select.empty {
+            color: grey;
+        }
+        /* Hidden placeholder */
+        select option[disabled]:first-child {
+            display: none;
+        }
+        /* CSS for jquery UI autocompletion */
+        .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;   /* prevent horizontal scrollbar */
+            overflow-x: hidden; /* add padding to account for vertical scrollbar */
+            z-index:1000 !important;
+        }
+        #group_label{
+            /*color:#28a745;*/
+            color:black;
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+            font-size: 80%;
+        }
+        /* Hide spin in number input */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+        }
+        input[type=number] {
+            -moz-appearance:textfield; /* Firefox */
+        }
+    </style>
+{% endblock head %}
+{%- block firstRow -%}
+<form action = "/edit_record?deal_id={{request.values.deal_id}}&im_id={{request.values.im_id}}" method = "post" autocomplete=off novalidate>
+{% endblock firstRow %}
+{% block navtitle %}
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link pl-0 text-white" href="/">
+            Home <i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link text-white pl-0" href="/edit?deal_id={{request.values.deal_id}}&im_id={{request.values.im_id}}">
+            Edit My Investment ({{request.values.im}})<i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="nav-item mr-0 mb-0 h5 d-block d-md-none">
+        <a class="nav-link pl-0 text-white" href="/edit?deal_id={{request.values.deal_id}}&im_id={{request.values.im_id}}">
+            <i class="fas fa-angle-left fa-lg ml-2 mr-2"></i>
+            </a>
+    </span>
+    <span class="navbar-brand mb-0 h1 mr-auto">
+        {{deal['name'].iloc[0]}}
+    </span>
+{% endblock navtitle %}
+{% block body %}
+{{super()}}
+<div class="col-lg-8 offset-lg-2">
+    <div class="card mt-1">
+        <div class="card-header">
+            <h5>Project Info.</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="manager">PIC</label>
+                        </div>
+                    </div>
+                    <select class="selectpicker form-control im" data-size="5" id="manager1" name="manager1" required>
+                        {% for manager in managers %}<option value="{{manager.im_id}}">{{manager.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <label for="country">Group</label>
+                    <input type="text" class="form-control" name="group" id="group" value="{{deal['group_name'].iloc[0]}}" required/>
+                    <label id="group_label"></label>
+                    <input type="hidden" name="group_id" id="group_id" value="{{deal['group_id'].iloc[0]}}">
+                </div>
+                <div class="col-lg-6">
+                    <label for="status">Status</label>
+                    <select class="selectpicker form-control" data-size="5" id="status" name="status" required>
+                        <option value="potential">Potential</option>
+                        <option value="invested">Invested</option>
+                        <option value="exited">Exited</option>
+                        <option value="aborted">Aborted</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-lg-6">
+                    <label for="name">Investment Name</label>
+                    <input type="text" class="form-control" name="name" id="name" value="{{deal['name'].iloc[0]}}" required/>
+                    <div class="invalid-feedback">
+                            Please input investment name
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label for="dealsize">Expected Return (USD mm)</label>
+                    <input type="number" step="0.000001" class="form-control" name="dealsize" id="dealsize" value="{{deal['dealSize'].iloc[0]}}" required/>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-lg-12">
+                    <label for="name">Description</label>
+                    <input type="text" class="form-control" name="description" id="description" value="{{deal['description'].iloc[0]}}" required/>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="form-check ml-4">
+                    <input type="checkbox" class="form-check-input" id="dateTBC">
+                    <label class="form-check-label" for="dateTBC">Date TBC</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="startDate">Date of Investment</label>
+                        <input type="text" class="form-control" name="startDate" id="startDate" value="{{deal['startDate'].iloc[0]}}">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="exitDate">Expected Exit Date</label>
+                        <input type="text" class="form-control" name="exitDate" id="exitDate" value="{{deal['exitDate'].iloc[0]}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3 justify-content-center">
+                <div class="col-lg-5">
+                    <button class="btn btn-success btn-lg btn-block" type="submit" value="{{deal['deal_id'].iloc[0]}}" name="submitButton">Update the Investment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+{%- block lastRow -%}
+
+</form>
+{% endblock lastRow %}
+{% block bodyEnd %}
+<script type="text/javascript" src="/static/datepickerEnabler.js"></script>
+<script type="text/javascript" src="/static/inputValidation.js"></script>
+<script type="text/javascript" src="/static/deal_record/add/project_group_searchbox.js"></script>
+<script>
+    // Set value from the database to selectpickrt
+    $(document).ready(function(){
+        var im = {{participants}};
+        $("#manager1").selectpicker('val', im[0]);
+        $("#group").selectpicker('val', "{{deal['group_id'].iloc[0]}}");
+        $("#status").selectpicker('val', "{{deal['status'].iloc[0]}}");
+    });
+</script>
+<script type="text/javascript">
+    // Initialize bootstrap datepicker
+    document.addEventListener("DOMContentLoaded",()=>{
+        $('#startDate').datepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            todayHighlight: true,
+            clearBtn: true
+        });
+
+        $('#exitDate').datepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            todayHighlight: true,
+            clearBtn: true
+        });
+    });
+</script>
+{% endblock bodyEnd %}

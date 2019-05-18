@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}deals report{% endblock title %}
+{% block head %}{{ super() }}
+<!--Bootstrap table javascript-->
+<script src="https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.js"></script>
+<!--FontAwesome-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<!--Bootstrap table css-->
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.css">
+<!--Bootstrap table extension - filter control-->
+<link rel="stylesheet" type="text/css" href="/static/bootstrap_table/extensions/filter-control/bootstrap-table-filter-control.css">
+<script src="/static/bootstrap_table/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+<!--Bootstrap table extension mobile-->
+<script src="/static/bootstrap_table/extensions/mobile/bootstrap-table-mobile.js"></script>
+<style>
+    #report1 {
+        font-size:0.8em;
+        width:50%;
+    }
+    #report2 {
+        font-size:0.8em;
+        table-layout: normal;
+    }
+    td{
+        word-wrap:break-word
+    }
+    th{
+        word-wrap:break-word
+    }
+
+    .wrap {
+        min-width:100px !important;
+        max-width: 100px;
+    }
+    /* Overide wrap text on th*/
+    .fixed-table-container .table thead th .th-inner {
+        white-space: normal !important;
+    }
+    /* Overide nowrap on th*/
+    .nowrap {
+        white-space: nowrap !important;
+    }
+    .wrapper .dropdown-toggle::after{
+        display:none;
+        position: none;
+    }
+</style>
+{% endblock head %}
+{% block navtitle %}
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link pl-0 text-white" href="/">
+            Home <i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link text-white pl-0" href="/report_selector">
+            Show Report<i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+
+    <span class="nav-item mr-0 mb-0 h5 d-block d-md-none">
+        <a class="nav-link pl-0 text-white" href="/report_selector">
+            <i class="fas fa-angle-left fa-lg ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="navbar-brand mb-0 h1 mr-auto">
+        Deals Report
+    </span>
+{% endblock navtitle %}
+{% block body %}
+{{super()}}
+<div class="col-lg-12">
+    <div class="table-responsive-sm">
+        <table class="table table-hover table-sm" data-show-columns="true" id="report3" data-sortable="true" data-filter-control="true" data-mobile-responsive="true" data-check-on-init="true">
+            <thead>
+                <tr>
+                    <th data-field="group_name" data-sortable="true" data-filter-control="select">Group</th>
+                    <th data-field="project_name" data-sortable="true" data-filter-control="input">Name</th>
+                    <th data-field="pic" data-sortable="true" data-filter-control="select">PIC</th>
+                    <th class="wrap" data-field="dealSize" data-sortable="true">Deal Size (USD mm)</th>
+                    <th data-field="status" data-sortable="true" data-filter-control="select">Status</th>
+                    <th class="nowrap" data-field="startDate" data-sortable="true">Start Date</th>
+                    <th class="nowrap" data-field="exitDate" data-sortable="true">Exit Date</th>
+                    <th data-field="description">Description</th>
+                    <th class="wrap" data-field="date_updated" data-sortable="true">Latest Project Update</th>
+                    <th class="wrap" data-field="update_content" data-sortable="true">Update Detail</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+{% endblock body %}
+<div class="row">
+    <br>
+    <br>
+</div>
+{% block bodyEnd %}
+<script>
+    $(document).ready(function(){
+        var jsonData = JSON.parse(`{{report | safe}}`);
+        $('#report3').bootstrapTable({
+            data: jsonData,
+            search:"true"
+        });
+    });
+</script>
+{% endblock bodyEnd %}

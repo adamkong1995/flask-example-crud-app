@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}report selector{% endblock title %}
+{% block head %}{{ super() }}
+<!--Bootstrap-select-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+{% endblock head %}
+{% block navtitle %}
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link pl-0 text-white" href="/">
+            Home <i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="nav-item mr-0 mb-0 h5 d-block d-md-none">
+        <a class="nav-link pl-0 text-white" href="/">
+            <i class="fas fa-angle-left fa-lg ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="navbar-brand mb-0 h1 mr-auto">
+        Show Report
+    </span>
+{% endblock navtitle %}
+{% block body %}
+{{super()}}
+<div class="col-lg-4">
+</div>
+<div class="col-lg-3">
+    <form action = "/report_selector" method = "post" autocomplete=off>
+        <div class="mt-5 mb-4">
+            <label for="manager">Get report:</label>
+            <select class="selectpicker form-control" data-size="5" id="reportType" name="reportType">
+                <option value="web_deals_report">Deals Report (Web)</option>
+                <option class="d-none d-md-block" value="csv_deals_report">Deals Report (CSV)</option>
+            </select>
+        </div>
+        <button class="btn btn-success btn-sm btn-block mb-5" type="submit">Submit</button>
+    </form>
+</div>
+{% endblock body %}
+{% block bodyEnd %}
+<!--Bootstrap-select-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/i18n/defaults-*.min.js"></script>
+{% endblock bodyEnd %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}user_management{% endblock title %}
+{% block head %}{{ super() }}{% endblock head %}
+{% block navtitle %}
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link pl-0 text-white" href="/">
+            Home <i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="nav-item mr-0 mb-0 h5 d-block d-md-none">
+        <a class="nav-link pl-0 text-white" href="/">
+            <i class="fas fa-angle-left fa-lg ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="navbar-brand mb-0 h1 mr-auto">
+        User Management
+    </span>
+{% endblock navtitle %}
+{% block firstRow %}
+{% endblock firstRow %}
+{% block body %}
+{{super()}}
+<div class="col-lg-8 offset-2">
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th>Short Name</th>
+                <th>Active</th>
+                <th>Email</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key,value in users.iterrows() %}<tr>
+                <td>
+                    {{value['display_name']}}
+                </td>
+                <td>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="name" 
+                        value="{{value['name']}}" 
+                        id="i{{value['im_id']}}" 
+                        required
+                    />
+                </td>
+                <td class='text-center'>
+                    {% if value['isActive'] %}
+                        <input
+                            class="form-check-input" 
+                            type="checkbox" 
+                            id="c{{value['im_id']}}"
+                            checked
+                        >
+                    {% else %}
+                        <input 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            id="c{{value['im_id']}}"
+                        >
+                    {% endif %}
+                </td>
+                <td>
+                    {{value['email']}}
+                </td>
+                <td>
+                    <button 
+                        class="btn btn-info updateBtn" 
+                        id="{{value['im_id']}}" 
+                        type="submit" 
+                    >
+                        Update
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript" src="/static/user_management.js"></script>
+{% endblock body %}
+{% block lastRow %}
+{% endblock lastRow %}

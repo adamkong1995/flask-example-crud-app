@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% block title %}
+    update selector
+{% endblock title %}
+{% block head %}
+    {{ super() }}
+    <!--Bootstrap-select js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/i18n/defaults-*.min.js"></script>
+    <!--Bootstrap-select css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+    <style>
+    /*style for dropdown box*/
+    select option:first-child {
+        color: grey;
+    }
+    select.empty {
+        color: grey;
+    }
+    /* Hidden placeholder */
+    select option[disabled]:first-child {
+        display: none;
+    }
+    </style>
+{% endblock head %}
+{% block navtitle %}
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link pl-0 text-white" href="/">
+            Home <i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link pl-0 text-white" href="/edit?deal_id={{request.values.deal_id}}&im_id={{request.values.im_id}}">
+              Edit My Investment ({{request.values.im}})<i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="nav-item mr-0 mb-0 h5 d-block d-md-none">
+        <a class="nav-link pl-0 text-white" href="/edit?deal_id={{request.values.deal_id}}&im_id={{request.values.im_id}}">
+            <i class="fas fa-angle-left fa-lg ml-2 mr-2"></i>
+          </a>
+    </span>
+    <span class="navbar-brand mb-0 h1 mr-auto">
+        Project Update
+    </span>
+{% endblock navtitle %}
+{% block firstRow %}{% endblock firstRow %}
+{% block body %}
+    {{super()}}
+    <div class="col-lg-12">
+        <div class="row mt-3 align-items-end">
+            <div class="col-lg-3">
+                <label for="project"><h6>Select the project you want to update</h6></label>
+                <select class="selectpicker form-control" data-live-search="true" data-size="5" id="project" name="project" required>
+                    <option value="" selected disabled>Select a project</option>
+                    {% for key, value in projects.iterrows() %}<option value="{{value['deal_id']}}">{{value['name']}}</option>
+                    {% endfor %}
+                    <div class="invalid-feedback">
+                            Please select a project
+                    </div>
+                </select>
+            </div>
+            <div class="col-lg-7">
+            </div>
+            <div class="col-lg-2 d-none d-md-block">
+                <button class="btn btn-warning no-print sendEmailButton" id="sendEmailButton">Send Update Email</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card text-white bg-secondary mt-4">
+                    <div class="card-header">
+                        <h5>Investment Info (Display Only)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-end">
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="exitDate">Investment</label>
+                                    <input type="text" class="form-control" id="project_name" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="exitDate">Group</label>
+                                    <input type="text" class="form-control" id="group" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="exitDate">PIC</label>
+                                    <input type="text" class="form-control" id="pic" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="exitDate">Description</label>
+                                    <input type="text" class="form-control" id="description" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mt-2 no-print">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="ml-3">Investment Update</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-1">
+                                <div class="form-group" id="update1Title"><h6>New Update</h6></div>
+                            </div>
+                            <div class="col-lg-9">
+                                <textarea class="form-control" id="update1" row="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mt-2 justify-content-center">
+                            <div class="col-lg-3">
+                                <button class="btn btn-success btn-lg btn-block no-print submitButton" id="submitButton">Add a Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <h5>Previous Updates</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="first_column" style="visibility:hidden">
+                            <div class="row">
+                                <div class="col-lg-1">
+                                    Sent Before?
+                                </div>
+                            </div>
+                        </div>
+                        <div id="previous_update">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="deleteConfirmBox" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Are you sure that you want to delete this?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger confirmDelete" value="" id="saveChange">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="updateConfirmBox" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm update?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info confirmUpdate" value="" id="saveChange">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="updateEmailModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Send project udpate email</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            To:
+                        </div>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" name="to" id="to" value="" required/>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-3">
+                            Cc:
+                        </div>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" name="cc" id="cc" value=""/>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-12">
+                            <h6>Update to send:</h6>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-12">
+                            <div id="updateToSend">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info btn-sm sendUpdateEmail" id="sendUpdateEmail">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/static/deal_record/update/select_project_ajax.js"></script>
+    <script type="text/javascript" src="/static/deal_record/update/show_updates_modal.js"></script>
+    <script type="text/javascript" src="/static/deal_record/update/send_updates_email.js"></script>
+    <script>
+        $(document).ready(function(){
+            try {
+                deal_id = '{{deal_id}}';
+                if (deal_id != 'None'){
+                    $('#project').selectpicker('val', deal_id);
+                }
+            }
+            catch(err) {
+            }
+        });
+    
+    </script>
+{% endblock body %}
+{% block lastRow %}{% endblock lastRow %}
+{% block bodyEnd %}{% endblock bodyEnd %}

@@ -1,0 +1,8 @@
+Flask
+Flask-SQLAlchemy
+pandas
+psycopg2
+Flask-Migrate
+flask_ldap3_login
+flask-login
+Flask-Principal

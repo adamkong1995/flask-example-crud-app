@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}edit table{% endblock title %}
+{% block head %}
+    {{ super() }}
+    <!--Bootstrap table javascript-->
+    <script src="https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.js"></script>
+    <!--Bootstrap table css-->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.css">
+    <!--Bootstrap table extension - filter control-->
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap_table/extensions/filter-control/bootstrap-table-filter-control.css">
+    <script src="/static/bootstrap_table/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+    <!--Bootstrap table extension mobile-->
+    <script src="/static/bootstrap_table/extensions/mobile/bootstrap-table-mobile.js"></script>
+    
+    <!--Bootstrap-select js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/i18n/defaults-*.min.js"></script>
+    <!--Bootstrap-select css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+    <style>
+        /*style for dropdown box*/
+        select option:first-child {
+            color: grey;
+        }
+        select.empty {
+            color: grey;
+        }
+        /* Hidden placeholder */
+        select option[disabled]:first-child {
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .container-fluid{
+                overflow: visible !important;
+            }
+        }
+        .wrap {
+            min-width:100px !important;
+            max-width: 100px;
+        }
+        /* Overide wrap text on th*/
+        .fixed-table-container .table thead th .th-inner {
+            white-space: normal !important;
+        }
+        /* Overide nowrap on th*/
+        .nowrap {
+            white-space: nowrap !important;
+        }
+    </style>
+{% endblock head %}
+{% block navtitle %}
+    <span class="nav-item mr-0 mb-0 h5 d-none d-md-block">
+        <a class="nav-link pl-0 text-white" href="/">
+            Home <i class="fas fa-angle-right ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="nav-item mr-0 mb-0 h5 d-block d-md-none">
+        <a class="nav-link pl-0 text-white" href="/">
+            <i class="fas fa-angle-left fa-lg ml-2 mr-2"></i>
+        </a>
+    </span>
+    <span class="navbar-brand mb-0 h1 mr-auto">
+        Edit My Project
+    </span>
+{% endblock navtitle %}
+{% block body %}
+    {{super()}}
+    <div class="col-lg-12">
+        <div class="row mt-3">
+            <div class="col-lg-3">
+                <label for="project"><h6>Projects owned by</h6></label>
+                <select class="selectpicker form-control" data-live-search="true" data-size="5" id="select_im" required>
+                    <option selected disabled style="display:none;">&#160;</option>
+                    {% for manager in managers %}<option value="{{manager.im_id}}">{{manager.name}}</option>
+                    {% endfor %}
+                    <div class="invalid-feedback">
+                            Please select an investment manager
+                    </div>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-12">
+                <div class="table-responsive-sm mb-5">
+                    <table class="table table-hover table-sm" id="edit_table" data-sortable="true" data-filter-control="true">
+                        <thead class="thead-light">
+                            <th data-field="name_y" data-width="3%" data-sortable="true">PIC</th>
+                            <th data-field="group_name" data-width="5%" data-sortable="true" data-filter-control="input">Group</th>
+                            <th data-field="name_x" data-width="7%" data-sortable="true" data-filter-control="input">Project</th>
+                            <th data-field="status" data-width="4%" data-sortable="true" data-filter-control="select">Status</th>
+                            <th class="wrap" data-field="dealSize" data-width="3%" data-sortable="true">Expected Return(USD mm)</th>
+                            <th data-field="startDate" data-width="10%" data-sortable="true">Start Date</th>
+                            <th data-field="exitDate" data-width="10%" data-sortable="true">Exit Date</th>
+                            <th data-field="description" data-width="25%" data-sortable="true">Description</th>
+                            <th data-field="latest_update" data-width="10%" data-sortable="true">Latest Project Update</th>
+                            <th data-formatter="TableActions" data-width="5%" data-sortable="true">Action</th>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="deleteConfirmBox" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Are you sure that you want to delete this?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger confirmDelete" value="" id="saveChange">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/static/deal_record/edit/select_im_ajax.js"></script>
+{% endblock body %}
+{% block bodyEnd %}
+<script>
+    $(document).ready(function(){
+        $('#edit_table').bootstrapTable();
+    });
+</script>
+<script>
+    // Auto select im if parameter include im_id
+    $(document).ready(function(){
+        var selected_im = {{selected_im}};
+        if (select_im != ""){
+            $('.selectpicker').selectpicker('val', selected_im);
+        }
+    });
+</script>
+{% endblock bodyEnd %}

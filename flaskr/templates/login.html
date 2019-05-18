@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!--Bootstrap 4 CSS-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+        <title>Login</title>
+        <style>
+            .wrapper {
+                width: 100%;
+                height: 100vh;
+                background-color: #f8f9fa!important;
+            }
+        </style>
+   </head>
+   <body>
+        <div class="wrapper">
+            <div id="content">
+                <nav class="navbar navbar-dark bg-dark navbar-expand-lg mb-0">
+                    <div class="container-fluid">
+                        <span class="nav-item mb-0 h5 d-none d-md-block mr-auto">
+                            <a class="nav-link pl-0 text-white" href="/">
+                                Login to Investment Database
+                            </a>
+                        </span>
+                    </div>
+                </nav>
+                <form action = "/login" method = "post" autocomplete=off>
+                    <div class='container p-2'>
+                        <div class='row justify-content-center'>
+                            <div class='col-lg-4'>
+                                <div class='card text-center mt-3'>
+                                    <div class='card-body'>
+                                        <img src='static/logo.png' alt='asm_logo' width='100' height='80' />
+                                        <h5 class="card-title mt-2">Demo Investment Database</h5>
+                                        <input class='form-control p-3 mt-4' name='username' type='text' placeholder='Username' />
+                                        <input class='form-control p-3 mt-2' name='password' type='password' placeholder='Password' />
+                                        <button type='submit' class='btn btn-primary form-control mt-3'>Log in</button>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        {% if message %}
+                        <div class='row justify-content-center'>
+                            <div class='col-lg-4'>
+                                <div class='text-danger'>
+                                        {{ message }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        {%- block bodyEnd %}{%- endblock bodyEnd %}
+   </body>
+</html>
