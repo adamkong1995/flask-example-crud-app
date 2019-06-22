@@ -1,4 +1,4 @@
-# Flask Example CRUD App
+# Flask Investment Database
 
 #### It is a Flask app with the following function/package:
 - CRUD operations (SQLAlchmey ORM, PostgreSQL11)
