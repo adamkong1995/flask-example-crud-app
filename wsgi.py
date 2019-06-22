@@ -1,7 +1,6 @@
 from flaskr.app import app
 import sys
 
-app.run(debug=True)
 # Use it if you have key.py file
 #from flaskr import key
 
