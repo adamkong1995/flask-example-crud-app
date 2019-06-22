@@ -48,6 +48,7 @@ def edit():
 
         deal['status'] = deal['status'].str.capitalize()
         deal['dealSize'] = deal['dealSize'].div(1000000)
+        print(deal['startDate'])
         deal['startDate'] = deal['startDate'].dt.strftime('%Y-%m-%d')
         deal['exitDate'] = deal['exitDate'].dt.strftime('%Y-%m-%d')
         deal['startDate'] = deal['startDate'].replace("NaT", "TBC")
