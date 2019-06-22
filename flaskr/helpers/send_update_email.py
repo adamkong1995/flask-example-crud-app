@@ -3,13 +3,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import pandas as pd
 
-from flaskr import key
+# from flaskr import key
 
 
 def send(to, cc, tosends):
-    login = key.EMAIL_USERNAME
-    password = key.EMAIL_PASSWORD
-    sender_email = key.EMAIL_SENDER
+    login = 'username'
+    password = 'password'
+    sender_email = 'test@email.com'
 
     message = MIMEMultipart("alternative")
     message["From"] = sender_email
@@ -59,6 +59,6 @@ def send(to, cc, tosends):
 
     allAddress = to + '; ' + cc
 
-    with smtplib.SMTP(key.EMAIL_SMTP_HOST, key.EMAIL_SMTP_PORT) as server:
+    with smtplib.SMTP('111.111.111.111', 11) as server:
         server.login(login, password)
         server.sendmail(sender_email, allAddress.split(";"), message.as_string())
